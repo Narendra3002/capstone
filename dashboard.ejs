@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Country Data Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        #search-form {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        #country-data {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+       
+    #country-name{
+        width: 300px; 
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    #country-name::placeholder{
+        color: #999;
+
+    }
+
+
+    </style>
+</head>
+<body>
+    <h1>Country Data Dashboard</h1>
+
+    <!-- Search Form -->
+    <form id="search-form">
+        <label for="country-name">Search by Country Name:</label>
+        <input type="text" id="country-name" placeholder="Enter country name">
+        <br><br>
+        <button type="submit">Search</button>
+        
+    </form>
+
+    <!-- Display Area for Country Data -->
+    <div id="country-data">
+        <h2>Country Information</h2>
+        <p><strong>Name:</strong> <span id="country-name-info"></span></p>
+        <p><strong>GDP:</strong> <span id="country-gdp-info"></span> USD</p>
+        <p><strong>Sex Ratio:</strong> <span id="country-sex-ratio-info"></span></p>
+        <p><strong>Population:</strong> <span id="country-population-info"></span></p>
+        <p><strong>Area:</strong> <span id="country-area-info"></span> km<sup>2</sup></p>
+        <p><strong>Unemployment Rate:</strong> <span id="country-unemployment-info"></span>%</p>
+        <p><strong>GDP Growth Rate:</strong> <span id="country-gdp-growth-info"></span>%</p>
+        <p><strong>Infant Mortality Rate:</strong> <span id="country-infant-mortality-info"></span>%</p>
+        <p><strong>Fertility Rate:</strong> <span id="country-fertility-info"></span>%</p>
+        <!-- Add more fields for additional data as needed -->
+    </div>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const countryName = document.getElementById('country-name').value;
+
+            if (countryName) {
+                fetchCountryData(countryName);
+            } else {
+                alert('Please enter a country name.');
+            }
+        });
+
+        function fetchCountryData(name) {
+            const apiKey = 'vkqlmBH3PEQjdB5yDBHjMg==q4JpY2uhSbLIkqp6'; // Replace with your API key
+            const apiUrl = `https://api.api-ninjas.com/v1/country?name=${encodeURIComponent(name)}`;
+
+            fetch(apiUrl, {
+                headers: {
+                    'X-Api-Key': apiKey
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display country data
+                document.getElementById('country-name-info').textContent = data[0].name;
+                document.getElementById('country-gdp-info').textContent = data[0].gdp.toLocaleString();
+                document.getElementById('country-sex-ratio-info').textContent = data[0].sex_ratio;
+                document.getElementById('country-population-info').textContent = data[0].population.toLocaleString();
+                document.getElementById('country-area-info').textContent = data[0].surface_area.toLocaleString();
+                document.getElementById('country-unemployment-info').textContent = data[0].unemployment;
+                document.getElementById('country-gdp-growth-info').textContent = data[0].gdp_growth;
+                document.getElementById('country-infant-mortality-info').textContent = data[0].infant_mortality;
+                document.getElementById('country-fertility-info').textContent = data[0].fertility;
+                // Add more fields for additional data as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
